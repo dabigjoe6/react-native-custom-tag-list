@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableWithoutFeedback, StyleSheet, ShadowPropTypesIOS } from 'react-native';
 
 
 interface Props {
+	id: number
 	title: string,
 	selected: boolean,
 	toggleTag: any,
@@ -19,33 +20,41 @@ interface Props {
 }
 
 export default function Tag(props: Props) {
+
+	let activeBackgroundColor: string | undefined = props.activeBackgroundColor;
+	let inactiveBackgroundColor: string | undefined = props.inactiveBackgroundColor;
+	let activeTextColor: string | undefined = props.activeTextColor;
+	let inactiveTextColor: string | undefined = props.inactiveTextColor;
+	let activeBorderColor: string | undefined = props.activeBorderColor;
+	let inactiveBorderColor: string | undefined = props.inactiveBorderColor;
+
 	if (typeof props.activeBackgroundColor === 'undefined') {
-		props.activeBackgroundColor = props.color;
+		activeBackgroundColor = props.color
 	}
 
 	if (typeof props.inactiveBackgroundColor === 'undefined') {
-		props.inactiveBackgroundColor = 'white'
+		inactiveBackgroundColor = 'white'
 	}
 
 	if (typeof props.activeTextColor === 'undefined') {
-		props.activeTextColor = 'white'
+		activeTextColor = 'white'
 	}
 
 	if (typeof props.inactiveTextColor === 'undefined') {
-		props.inactiveTextColor = props.color
+		inactiveTextColor = props.color
 	}
 
 	if (typeof props.activeBorderColor === 'undefined') {
-		props.activeBorderColor = props.color
+		activeBorderColor = props.color
 	}
 
 	if (typeof props.inactiveBorderColor === 'undefined') {
-		props.inactiveBorderColor = props.color
+		inactiveBorderColor = props.color
 	}
 
-	const backgroundColor = props.selected ? props.activeBackgroundColor : props.inactiveBackgroundColor;
-	const color = props.selected ? props.activeTextColor : props.inactiveTextColor;
-	const borderColor = props.selected ? props.activeBorderColor : props.inactiveBorderColor
+	const backgroundColor = props.selected ? activeBackgroundColor : inactiveBackgroundColor;
+	const color = props.selected ? activeTextColor : inactiveTextColor;
+	const borderColor = props.selected ? activeBorderColor : inactiveBorderColor
 
 	function renderRightIcon() {
 		if (props.selected) {
@@ -60,7 +69,7 @@ export default function Tag(props: Props) {
 	}
 
 	return (
-		<TouchableWithoutFeedback onPress={props.toggleTag}>
+		<TouchableWithoutFeedback onPress={() => props.toggleTag(props.id)}>
 			<View style={[styles.tagContainer, { backgroundColor, borderColor }]}>
 				<Text style={[styles.title, { color }]}>{props.title}</Text>
 				{renderRightIcon}
